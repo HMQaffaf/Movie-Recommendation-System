@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineMatch AI — Intelligent Movie Recommendation System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar-header">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="window.location.reload()">
+        <span class="brand-icon"><i class="bi bi-film"></i></span>
+        <span class="brand-text">Cine<span class="text-accent">Match</span> <span class="badge-ai">AI</span></span>
+      </div>
+      <div class="nav-actions">
+        <a href="#recommendationsSection" class="nav-btn">
+          <i class="bi bi-stars me-1"></i> Recommendations
+        </a>
+        <a href="#catalogSection" class="nav-btn">
+          <i class="bi bi-collection-play me-1"></i> Catalog
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Cinematic Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-pill">
+        <i class="bi bi-cpu-fill"></i> Powered by Cosine Similarity & TF-IDF
+      </div>
+      <h1 class="hero-title">
+        Discover Movies You'll <span class="gradient-text">Love Watching</span>
+      </h1>
+      <p class="hero-subtitle">
+        Enter your favorite movies or pick from the catalog. Our machine learning engine computes cosine vectors to deliver hyper-personalized recommendations.
+      </p>
+
+      <!-- Search & Autocomplete Input Container -->
+      <div class="search-box-wrapper">
+        <div class="search-input-group">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" id="movieSearchInput" class="search-input" placeholder="Type a movie title (e.g. Inception, Interstellar, The Dark Knight)..." autocomplete="off">
+          <button id="clearSearchBtn" class="clear-btn d-none"><i class="bi bi-x-circle-fill"></i></button>
+        </div>
+        <!-- Autocomplete Suggestions Dropdown -->
+        <div id="autocompleteDropdown" class="autocomplete-dropdown d-none"></div>
+      </div>
+
+      <!-- Selected Movies Tags -->
+      <div id="selectedPillsContainer" class="selected-pills-container d-none">
+        <span class="selected-label">Selected Favorites:</span>
+        <div id="selectedPillsList" class="pills-list"></div>
+        <button id="recommendBtn" class="btn-primary-action">
+          <i class="bi bi-lightning-charge-fill me-1"></i> Generate Recommendations
+        </button>
+      </div>
+
+      <!-- Algorithm Tuning Switcher -->
+      <div class="algorithm-switcher">
+        <span class="algo-label"><i class="bi bi-sliders me-1"></i> Engine Mode:</span>
+        <div class="algo-options">
+          <label class="algo-option active">
+            <input type="radio" name="recomMode" value="hybrid" checked>
+            <span><i class="bi bi-gem"></i> Hybrid AI (Balanced)</span>
+          </label>
+          <label class="algo-option">
+            <input type="radio" name="recomMode" value="collaborative">
+            <span><i class="bi bi-people"></i> Collaborative (User Matrix)</span>
+          </label>
+          <label class="algo-option">
+            <input type="radio" name="recomMode" value="content">
+            <span><i class="bi bi-file-text"></i> Content-Based (TF-IDF)</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Recommendations Result Section -->
+    <section id="recommendationsSection" class="content-section d-none">
+      <div class="section-header">
+        <div>
+          <span class="section-tag"><i class="bi bi-stars"></i> Personalized For You</span>
+          <h2 class="section-heading" id="recomHeading">Top Recommended Movies</h2>
+        </div>
+        <div class="section-badge-info" id="recomBadgeInfo">
+          Matching based on your selection
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div id="recommendationsGrid" class="movies-grid"></div>
+    </section>
+
+    <!-- Genre Filter Section -->
+    <section id="catalogSection" class="content-section">
+      <div class="section-header">
+        <div>
+          <span class="section-tag"><i class="bi bi-grid-fill"></i> Movie Collection</span>
+          <h2 class="section-heading">Browse by Genre & Popularity</h2>
+        </div>
+      </div>
+
+      <!-- Genre Pills -->
+      <div class="genre-chips-container" id="genreChipsContainer">
+        <button class="genre-chip active" data-genre="all"><i class="bi bi-fire"></i> Top Rated</button>
+        <button class="genre-chip" data-genre="Sci-Fi"><i class="bi bi-rocket-takeoff"></i> Sci-Fi</button>
+        <button class="genre-chip" data-genre="Action"><i class="bi bi-lightning"></i> Action</button>
+        <button class="genre-chip" data-genre="Thriller"><i class="bi bi-eye"></i> Thriller</button>
+        <button class="genre-chip" data-genre="Drama"><i class="bi bi-heart"></i> Drama</button>
+        <button class="genre-chip" data-genre="Crime"><i class="bi bi-incognito"></i> Crime</button>
+        <button class="genre-chip" data-genre="Animation"><i class="bi bi-palette"></i> Animation</button>
+        <button class="genre-chip" data-genre="Comedy"><i class="bi bi-emoji-laughing"></i> Comedy</button>
+      </div>
+
+      <!-- Trending / Filtered Grid -->
+      <div id="trendingGrid" class="movies-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Movie Detail Modal -->
+  <div id="movieModal" class="modal-overlay d-none">
+    <div class="modal-card">
+      <button id="closeModalBtn" class="modal-close"><i class="bi bi-x-lg"></i></button>
+      <div class="modal-body" id="modalBody">
+        <!-- Dynamically injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast-box d-none">
+    <i class="bi bi-check-circle-fill toast-icon"></i>
+    <span id="toastMessage">Movie added to selection!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <i class="bi bi-film"></i> CineMatch AI
+      </div>
+      <p class="footer-text">
+        Advanced Machine Learning Movie Recommender built with Python, Cosine Similarity, and TF-IDF Vectorization.
+      </p>
+      <p class="footer-credits">
+        &copy; 2026 Crafted for Machine Learning Portfolios.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
